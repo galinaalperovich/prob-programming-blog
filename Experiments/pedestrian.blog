@@ -1,0 +1,127 @@
+// A simple BLOG example on the publication domain.
+type DayTime;
+distinct DayTime morning, lunch, evening;
+
+type Pedestrian;
+type Car;
+
+type Light;
+distinct Light green, yellow, red;
+
+type TrafficLight;
+type Zebra;
+
+type Distance;
+distinct Distance close, far;
+
+type isZebra;
+type isTL;
+
+#Car ~ Poisson(10);
+
+random Boolean isZebra ~ Categorical({true -> 0.5, false -> 0.5}); 
+random Boolean isTL ~ Categorical({true -> 0.5, false -> 0.5}); 
+
+#Zebra ~ 
+	case isZebra in {
+		false -> 0,
+		true -> Poisson(1)
+	};
+
+#TrafficLight ~ 
+	case isTL in {
+		false -> 0,
+		true -> Poisson(2)
+	};
+
+
+random DayTime getDayTime() ~ Categorical({morning -> 0.33, lunch -> 0.33, evening -> 0.33});
+random Distance getDistanceZebra(Pedestrian p, Zebra z) ~ Categorical({far -> 0.5, close -> 0.5});
+random Distance getDistanceTL(Pedestrian p, TrafficLight tl) ~ Categorical({far -> 0.5, close -> 0.5});
+
+random Integer NumberOfPedestrian(DayTime d) ~
+    case getDayTime() in {
+						    morning -> Poisson(15),	
+						    lunch -> Poisson(10),
+						    evening -> Poisson(15)
+						    };
+
+random Light Color(TrafficLight tl) ~ Categorical({green -> 0.45, yellow -> 0.1, red -> 0.45});
+
+
+#Pedestrian ~ 
+	 case getDayTime() in {
+						 	morning -> Poisson(10),
+						 	lunch -> Poisson(5),
+						 	evening -> Poisson(8)
+						   };
+
+random Boolean CrossingTheRoad(Pedestrian r) ~ 
+case 	[getDayTime(), 											// daytime
+		(size({tl for TrafficLight tl}) > 0),					// number of TrafficLights
+	 	(exists TrafficLight tl (Color(tl) == green)), 			// some of them is green
+	 	((exists Zebra z (getDistanceZebra(r, z) == close)) | (exists TrafficLight tl (getDistanceTL(r, tl) == close)))] in {		// zebra is close
+	
+	// >0 Trafficlights, green, zebra
+	[morning, true, true, true] -> Categorical({true -> 0.9, false -> 0.1}),
+	[lunch, true, true] -> Categorical({true -> 0.9, false -> 0.3}),
+	[evening, true, true]-> Categorical({true -> 0.9, false -> 0.1}),
+	
+	// >0 Trafficlights, green, no zebra
+	[morning, true, true, false] -> Categorical({true -> 0.85, false -> 0.1}),
+	[lunch, true, true, true] -> Categorical({true -> 0.8, false -> 0.2}),
+	[evening, true, true, false]-> Categorical({true -> 0.75, false -> 0.3}),
+
+	// >0 Trafficlights, red, zebra
+	[morning, true, false, true] -> Categorical({true -> 0.2, false -> 0.8}),
+	[lunch, true, false, true] -> Categorical({true -> 0.3, false -> 0.7}),
+	[evening, true, false, true]-> Categorical({true -> 0.2, false -> 0.8}),
+
+	// >0 Trafficlights, red, no zebra
+	[morning, true, false, false] -> Categorical({true -> 0.3, false -> 0.8}),
+	[lunch, true, true, false] -> Categorical({true -> 0.4, false -> 0.7}),
+	[evening, true, true, false]-> Categorical({true -> 0.5, false -> 0.8}),
+
+	// no traffic lights, no red, no zebra
+	[morning, false, false, false] -> Categorical({true -> 0.1, false -> 0.6}),
+	[lunch, false, false, false] -> Categorical({true -> 0.1, false -> 0.7}),
+	[evening, false, false, false]-> Categorical({true -> 0.1, false -> 0.8}),
+
+	// no traffic lights, no red, IS zebra
+	[morning, false, false, true] -> Categorical({true -> 0.2, false -> 0.6}),
+	[lunch, false, false, true] -> Categorical({true -> 0.2, false -> 0.7}),
+	[evening, false, false, true]-> Categorical({true -> 0.2, false -> 0.8})
+	};
+    
+
+// Begin evidence, queries
+// ================================================================================================================
+// ROAD OBJECTS
+distinct Pedestrian p1, p2;
+distinct Car c1, c2, c3;
+
+// ROAD ENVIRONMENT
+//obs isZebra = true;
+//obs isTL = true;
+
+obs isZebra = true;
+obs isTL = false;
+
+//distinct TrafficLight tl1;
+//obs Color(tl1) = red;
+distinct Zebra z1;
+
+
+obs getDayTime() = morning;
+
+obs getDistanceZebra(p2, z1) = close;
+obs getDistanceZebra(p1, z1) = far;
+
+
+
+
+query size({p for Pedestrian p});
+//query size({tl for TrafficLight tl});
+
+query CrossingTheRoad(p1);
+query CrossingTheRoad(p2);

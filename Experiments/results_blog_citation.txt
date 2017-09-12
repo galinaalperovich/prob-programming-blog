@@ -1,0 +1,103 @@
+===============
+   RESULTS
+===============
+
+A = 200
+C = 300
+P = 60
+
+O = 10
+Q = 20
+
+Samples done: 1000.  	Time elapsed: 27.999 s.
+Samples done: 2000.  	Time elapsed: 53.273 s.
+Samples done: 3000.  	Time elapsed: 77.659 s.
+Samples done: 4000.  	Time elapsed: 102.723 s.
+Samples done: 5000.  	Time elapsed: 127.859 s.
+Samples done: 6000.  	Time elapsed: 152.527 s.
+Samples done: 7000.  	Time elapsed: 182.106 s.
+Samples done: 8000.  	Time elapsed: 208.496 s.
+Samples done: 9000.  	Time elapsed: 232.046 s.
+Samples done: 10000.  	Time elapsed: 256.19 s.
+
+
+------------------------------------------------
+
+
+# number of authors
+A = 100
+# number of papers
+P = 50
+# number of cites
+C = 80
+# number of items in query for each block
+O = 10
+# number of items in observation
+Q = 20
+
+
+Samples done: 1000.  	Time elapsed: 21.047 s.
+Samples done: 2000.  	Time elapsed: 39.84 s.
+Samples done: 3000.  	Time elapsed: 58.749 s.
+Samples done: 4000.  	Time elapsed: 77.807 s.
+Samples done: 5000.  	Time elapsed: 98.054 s.
+Samples done: 6000.  	Time elapsed: 117.253 s.
+Samples done: 7000.  	Time elapsed: 140.202 s.
+Samples done: 8000.  	Time elapsed: 159.67 s.
+Samples done: 9000.  	Time elapsed: 178.926 s.
+Samples done: 10000.  	Time elapsed: 198.037 s.
+
+------------------------------------------------
+# number of authors
+A = 100
+
+# number of papers
+P = 50
+
+# number of cites
+C = 80
+
+# number of items in query for each block
+O = 30
+
+# number of items in observation
+Q = 40
+
+Samples done: 1000.  	Time elapsed: 53.869 s.
+Samples done: 2000.  	Time elapsed: 102.043 s.
+Samples done: 3000.  	Time elapsed: 158.852 s.
+Samples done: 4000.  	Time elapsed: 221.49 s.
+Samples done: 5000.  	Time elapsed: 275.429 s.
+Samples done: 6000.  	Time elapsed: 326.029 s.
+Samples done: 7000.  	Time elapsed: 382.287 s.
+Samples done: 8000.  	Time elapsed: 440.523 s.
+Samples done: 9000.  	Time elapsed: 493.83 s.
+Samples done: 10000.  	Time elapsed: 558.814 s.
+
+------------------------------------------------
+
+# number of authors
+A = 200
+
+# number of papers
+P = 100
+
+# number of cites
+C = 150
+
+# number of items in query for each block
+O = 60
+
+# number of items in observation
+Q = 60
+
+Samples done: 1000.  	Time elapsed: 219.467 s.
+Samples done: 2000.  	Time elapsed: 442.607 s.
+Samples done: 3000.  	Time elapsed: 650.612 s.
+Samples done: 4000.  	Time elapsed: 847.969 s.
+Samples done: 5000.  	Time elapsed: 1053.623 s.
+Samples done: 6000.  	Time elapsed: 1250.081 s.
+Samples done: 7000.  	Time elapsed: 1460.352 s.
+Samples done: 8000.  	Time elapsed: 1651.38 s.
+Samples done: 9000.  	Time elapsed: 1862.531 s.
+Samples done: 10000.  	Time elapsed: 2065.52 s.

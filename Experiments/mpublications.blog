@@ -1,0 +1,84 @@
+// A simple BLOG example on the publication domain.
+
+type Researcher;
+#Researcher ~ Poisson(10);
+
+random Boolean Thorough(Researcher r) ~ Categorical({true -> 0.2, false -> 0.8});
+
+random Boolean Productive(Researcher r) ~
+       case Thorough(r) in {true -> Categorical({true -> 0.3, false -> 0.7}),
+                   false -> Categorical({true -> 0.5, false -> 0.5})}
+;
+
+type Publication;
+//origin Researcher Author(Publication);
+random Researcher Author(Publication p) ~ UniformChoice({r for Researcher r});
+
+// each researcher is the author of a random number of publications.
+// Number of Publications whose author is researcher is random
+
+//#Publication(Author = researcher) ~
+//    if Productive(researcher) then Poisson(5)
+//    else Poisson(2)
+//;
+        
+type Citation;
+origin Publication Source(Citation);
+//random Publication Source(Citation c) ~ UniformChoice({p for Publication p});
+
+// each publication is the source of a random number of citations.
+// Number of citation whose source is publication is random
+#Citation(Source = publication) ~
+    if (Thorough(Author(publication))) then Poisson(8)
+    else Poisson(4)
+;
+
+
+// Random vairable target - all publications are uniformly distributed, no self citation       
+random Publication Target(Citation c)
+       ~ UniformChoice({p for Publication p : p != Source(c)});
+
+
+// Coauthor function
+random Boolean Coauthor(Researcher a, Researcher b) ~
+	case (exists Citation c 
+         Author(Source(c)) == a &
+         Author(Target(c)) == b) in {true -> Categorical({true -> 0.7, false -> 0.3}), false -> Categorical({true -> 0.1, false -> 0.9})}
+;
+
+
+// Begin evidence, queries
+//distinct Researcher Einstein, Galileo, Tven, Paul;
+//distinct Publication p1, p2, p3, p4, p5;
+//distinct Citation cite1, cite2, cite3, cite4, cite5;
+//
+//obs Productive(Einstein) = true;
+//obs Productive(Galileo) = true;
+//obs Productive(Paul) = false;
+//obs Productive(Tven) = true;
+//
+//obs Target(cite1) = p4;
+//obs Target(cite2) = p1;
+////obs Target(cite1) = p3;
+//obs Target(cite3) = p1;
+//
+//obs Author(p1) = Einstein;
+//obs Author(p2) = Galileo;
+//obs Author(p4) = Tven;
+//obs Author(p5) = Einstein;
+//
+//query size({p for Publication p : Author(p) == Einstein});
+//query size({p for Publication p : Author(p) == Galileo});
+//query size({p for Publication p : Author(p) == Tven});
+//
+//query (exists Citation c 
+//         Author(Source(c)) == Einstein &
+//         Author(Target(c)) == Tven);
+//
+//
+//query Coauthor(Einstein, Tven) == true;
+//query Coauthor(Tven, Galileo) == true;
+//
+//query size({c for Citation c : Source(c) == p1});
+//
+//
